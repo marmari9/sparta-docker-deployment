@@ -97,7 +97,7 @@ This lists running containers. If you see `my-nginx`, the server is running.
 
 
 
-![alt text](<images/nginx running-1.png>)
+![alt text](<nginx running-1.png>)
 
 
 ### 5. Open Nginx in Your Browser
@@ -106,7 +106,7 @@ This lists running containers. If you see `my-nginx`, the server is running.
 
 
 
-![alt text](<images/welcome to nginx-1.png>)
+![alt text](<welcome to nginx-1.png>)
 
 
 
@@ -144,7 +144,7 @@ Docker prevents you from removing an active container.
 
 
 
-![alt text](images/error.png)
+![alt text](error.png)
 
 
 
@@ -155,7 +155,7 @@ docker rm -f my-nginx
 ```
 This forces the container to stop and deletes it immediately.
 
-![alt text](<images/force remove.png>)
+![alt text](<force remove.png>)
 
 ### 4. Verify That the Container Is Gone
 Run:
@@ -192,7 +192,7 @@ Run:
 docker exec -it my-nginx bash
 ```
 
-![alt text](images/TTY.png)
+![alt text](TTY.png)
 
 If using Git Bash and you get a TTY error, use:
 ```sh
@@ -255,7 +255,7 @@ exit
 Refresh `http://localhost` in the browser. The modified message should be visible.
 
 
-![alt text](images/change.png)
+![alt text](change.png)
 
 
 ## 6. Running Another Container on Port 80 and Resolving Port Conflict
@@ -285,7 +285,7 @@ Bind for 0.0.0.0:80 failed: port is already allocated.
 ```
 This happens because port 80 is already in use by `my-nginx`, and Docker cannot bind two containers to the same host port.
 
-![alt text](<images/error2 .png>)
+![alt text](<error2 .png>)
 
 
 ### 4. Remove the Failed Container
@@ -309,7 +309,7 @@ docker ps
 ```
 
 
-![alt text](<images/port 90.png>)
+![alt text](<port 90.png>)
 
 You should see `dreamteam-nginx` now mapped to port 90.
 
@@ -319,7 +319,7 @@ You should see `dreamteam-nginx` now mapped to port 90.
 
 
 
-![alt text](<images/nginx 90.png>)
+![alt text](<nginx 90.png>)
 
 
 
@@ -372,7 +372,7 @@ docker ps
 ```
 
 
-![alt text](<images/docker hub.png>)
+![alt text](<docker hub.png>)
 
 ---
 
@@ -380,7 +380,7 @@ docker ps
 - Open `http://localhost:8080` in your browser.
 - You should see your **modified Nginx homepage**.
 
-![alt text](<images/task 6.png>)
+![alt text](<task 6.png>)
 
 
 # Task: Automating Docker Image Creation Using a Dockerfile
@@ -513,4 +513,4 @@ docker ps
 - Open **http://localhost:9191**.
 - You should see your **custom Nginx page**.
 
-![alt text](<images/host 9191.png>)
+![alt text](<host 9191.png>)
