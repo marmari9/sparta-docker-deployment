@@ -514,3 +514,411 @@ docker ps
 - You should see your **custom Nginx page**.
 
 ![alt text](<images/host 9191.png>)
+
+
+
+
+# Task: Running the Node.js v20 Sparta Test App in a Docker Container
+
+## 1. Create a New Project Folder
+Each Docker project needs its own `Dockerfile`, so we create a separate directory:
+```sh
+mkdir sparta-node-docker
+cd sparta-node-docker
+```
+
+---
+
+## 2. Copy the `app` Folder Inside the New Directory
+Since we want to keep the original `app` folder, we copy it instead of moving:
+```sh
+cp -r ~/onedrive/documents/github/app ./app
+```
+Verify that the `app` folder exists:
+```sh
+ls -l
+```
+Expected output:
+```plaintext
+sparta-node-docker/
+│── app/       # Copied Node.js application files
+```
+
+---
+
+## 3. Create the `Dockerfile`
+Inside `sparta-node-docker`, create a `Dockerfile`:
+```sh
+touch Dockerfile
+```
+Edit the `Dockerfile` and add:
+```dockerfile
+# Use Node.js v20 as the base image
+FROM node:20
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy the application code into the container
+COPY app /usr/src/app
+
+# Copy package.json and install dependencies
+COPY app/package*.json ./
+RUN npm install
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "app.js"]
+```
+
+---
+
+## 4. Build the Docker Image
+Run:
+```sh
+docker build -t sparta-node:v1 .
+```
+Verify the image was created:
+```sh
+docker images
+```
+
+---
+
+## 5. Run the Container Locally
+Start the container and map it to port 3000:
+```sh
+docker run -d -p 3000:3000 --name sparta-node sparta-node:v1
+```
+Verify the container is running:
+```sh
+docker ps
+```
+Open **http://localhost:3000** in your browser to confirm it works.
+
+---
+
+## 6. Push the Image to Docker Hub
+1. **Log in to Docker Hub**:
+   ```sh
+   docker login
+   ```
+2. **Tag the image**:
+   ```sh
+   docker tag sparta-node:v1 mrmri9/sparta-node:v1
+   ```
+3. **Push the image**:
+   ```sh
+   docker push mrmri9/sparta-node:v1
+   ```
+
+---
+
+## 7. Remove the Local Copy of the Image
+To simulate pulling from Docker Hub, remove the local image:
+```sh
+docker rmi sparta-node:v1
+```
+Verify it's removed:
+```sh
+docker images
+```
+
+---
+
+## 8. Run the Container from Docker Hub
+Now, pull and run the image from **Docker Hub**:
+```sh
+docker run -d -p 3000:3000 --name fresh-sparta-node mrmri9/sparta-node:v1
+```
+
+### **Fixing Port & Name Conflicts**
+If you get an error:
+```
+docker: Error response from daemon: Conflict. The container name "/fresh-sparta-node" is already in use.
+```
+#### **1️⃣ Check existing containers:**
+```sh
+docker ps -a
+```
+#### **2️⃣ Remove the conflicting container:**
+```sh
+docker rm fresh-sparta-node
+```
+#### **3️⃣ Run the container again:**
+```sh
+docker run -d -p 3000:3000 --name fresh-sparta-node mrmri9/sparta-node:v1
+```
+
+![alt text](images/3000.png)
+
+
+
+
+# Research: Docker Compose
+
+## **1️⃣ Why Use Docker Compose?**
+Docker Compose is a **tool** used to **define and manage multi-container Docker applications** using a simple **YAML file**.
+
+### **🔹 Benefits:**
+- **Easier Multi-Container Management** → Instead of running multiple `docker run` commands, you define everything in `docker-compose.yml`.
+- **Simplifies Networking** → Containers can easily communicate using service names instead of IP addresses.
+- **Environment Management** → Supports `.env` files for configuration.
+- **Scalability** → You can scale services (`docker-compose up --scale`).
+- **Portable & Reproducible** → One `docker-compose.yml` can deploy the same setup on any machine.
+
+---
+
+## **2️⃣ How to Use Docker Compose?**
+### **🔹 Installation Requirements:**
+- **Docker must be installed.**
+- **Docker Compose is built-in** with **Docker Desktop** (Windows & macOS).
+- On **Linux**, install it manually:
+  ```sh
+  sudo apt update
+  sudo apt install docker-compose -y
+  ```
+
+### **🔹 Storing the Docker Compose File**
+- The `docker-compose.yml` file should be in the **project root directory**.
+- It defines services, networks, and volumes.
+
+Example directory structure:
+```plaintext
+sparta-node-docker/
+│── app/
+│── Dockerfile
+│── docker-compose.yml  # This is where the configuration is stored
+```
+
+---
+
+## **3️⃣ Important Docker Compose Commands**  
+
+| **Command** | **Explanation** |
+|------------|---------------|
+| `docker-compose up` | Starts the application. |
+| `docker-compose up -d` | Starts in **detached mode** (runs in background). |
+| `docker-compose down` | Stops and removes all containers. |
+| `docker-compose ps` | Lists running services. |
+| `docker-compose logs -f` | Shows real-time logs. |
+| `docker-compose images` | Lists images used by the project. |
+| `docker-compose restart` | Restarts all services. |
+
+---
+
+## **4️⃣ Running the Application with Docker Compose**
+### **🔹 Start Without Detached Mode**
+```sh
+docker-compose up
+```
+- Runs services in the foreground.
+- Logs are visible in real-time.
+- Press `CTRL+C` to stop.
+
+### **🔹 Start in Detached Mode**
+```sh
+docker-compose up -d
+```
+- Runs in the **background**.
+- Does **not** show logs in the terminal.
+- Logs can still be viewed using:
+  ```sh
+  docker-compose logs -f
+  ```
+
+### **🔹 Difference Between Running With & Without Detached Mode**
+
+| Mode | Behavior |
+|------|----------|
+| **Without `-d`** | Logs appear in the terminal, stops when you close it. |
+| **With `-d`** | Runs in the background, use `docker-compose logs -f` to view logs. |
+
+---
+
+## **5️⃣ Stopping & Managing Services**  
+### **🔹 Stop Running Containers**  
+```sh
+docker-compose down
+```
+This **removes** all containers, networks, and volumes.
+
+### **🔹 Restart Services**  
+```sh
+docker-compose restart
+```
+
+### **🔹 Check Running Services**  
+```sh
+docker-compose ps
+```
+
+---
+
+## **6️⃣ Viewing Logs & Images**  
+### **🔹 View Real-Time Logs**  
+```sh
+docker-compose logs -f
+```
+This shows **live logs** from all services.
+
+### **🔹 View Docker Compose Images**  
+```sh
+docker-compose images
+```
+Lists all **images used** in the project.
+
+---
+
+
+## Task 9: 
+# Running Node.js App & MongoDB with Docker Compose
+
+## **1️⃣ Setting Up Docker Compose for Node.js & MongoDB**
+
+We used **Docker Compose** to manage a **Node.js app** and a **MongoDB database** together in a multi-container setup.
+
+### **✅ Docker Compose Configuration**
+Inside the project directory (`sparta-node-docker`), we created a `docker-compose.yml` file:
+
+```yaml
+version: "3"
+
+services:
+  app:
+    image: mrmri9/sparta-node:v1
+    container_name: sparta-node
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      DB_HOST: mongodb://mongo:27017/sparta_db
+    command: sh -c "node seeds/seed.js && npm start"
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    command: mongod --bind_ip 0.0.0.0
+
+volumes:
+  mongo-data:
+```
+
+---
+
+## **2️⃣ Running the Application**
+To start the containers, we ran:
+```sh
+docker-compose up -d
+```
+This created and launched both **MongoDB** and the **Node.js app**.
+
+To check if the containers were running:
+```sh
+docker-compose ps
+```
+
+---
+
+## **3️⃣ Seeding the Database**
+We used a **seed script** (`seeds/seed.js`) to populate MongoDB with test data.
+
+### **✅ Running the Seeding Script**
+Inside the **sparta-node** container:
+```sh
+winpty docker exec -it sparta-node bash
+```
+Then:
+```sh
+export DB_HOST="mongodb://mongo:27017/sparta_db"
+node seeds/seed.js
+```
+**Expected Output:**
+```plaintext
+Connected to database
+Database cleared
+Database seeded with 100 records
+Database connection closed
+```
+
+To verify the data inside MongoDB:
+```sh
+docker exec -it mongodb bash
+mongosh
+use sparta_db
+db.posts.find().pretty()
+```
+
+---
+
+## **4️⃣ Fixing Issues & Blockers**
+
+### **🚧 Blocker 1: `Cannot GET /posts` Error**
+**Issue:** The `/posts` route did not work.
+
+**Fix:**
+- Checked `app.js` and found that `/posts` was inside an `if(process.env.DB_HOST)` block.
+- `DB_HOST` was missing, so we updated `docker-compose.yml` to include:
+  ```yaml
+  environment:
+    DB_HOST: mongodb://mongo:27017/sparta_db
+  ```
+- Restarted everything:
+  ```sh
+  docker-compose down
+  docker-compose up -d
+  ```
+- `/posts` worked after the fix!
+
+### **🚧 Blocker 2: MongoDB Connection Issues**
+**Issue:** `DB_HOST` was not set inside the container, preventing MongoDB from connecting.
+
+**Fix:**
+- Manually set `DB_HOST` in the container:
+  ```sh
+  export DB_HOST="mongodb://mongo:27017/sparta_db"
+  ```
+- Updated `docker-compose.yml` to set `DB_HOST` automatically.
+
+### **🚧 Blocker 3: "the input device is not a TTY" Error in Git Bash**
+**Issue:** Running `docker exec -it` inside Git Bash gave an error.
+
+**Fix:** Used `winpty` before the command:
+```sh
+winpty docker exec -it sparta-node bash
+```
+
+### **🚧 Blocker 4: Missing `views/posts/index.ejs`**
+**Issue:** The `/posts` route was rendering `posts/index.ejs`, but the file was missing.
+
+**Fix:**
+- Checked if the file existed inside the container:
+  ```sh
+  ls views/posts/index.ejs
+  ```
+- Added a proper `index.ejs` file in the correct location.
+
+---
+
+## **5️⃣ Final Testing**
+After resolving all issues, we successfully accessed **`/posts`** in the browser:
+```plaintext
+http://localhost:3000/posts
+```
+
+
+![alt text](<images/posts page working.png>)
+
+
+
+Also tested with **cURL**:
+```sh
+curl -X GET http://localhost:3000/posts
+```

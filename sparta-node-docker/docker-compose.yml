@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  app:
+    image: mrmri9/sparta-node:v1
+    container_name: sparta-node
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      DB_HOST: mongodb://mongo:27017/sparta_db
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    command: mongod --bind_ip 0.0.0.0
+
+volumes:
+  mongo-data:
+
+

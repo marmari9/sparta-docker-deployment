@@ -98,3 +98,49 @@ Here’s a summary of what happens when you run an image that exists vs. does no
 
 ---
 
+## Task 8:
+
+| Step | Command | Explanation |
+|------|---------|-------------|
+| Create project folder | `mkdir sparta-node-docker && cd sparta-node-docker` | Organizes project files. |
+| Copy `app` folder | `cp -r ~/onedrive/documents/github/app ./app` | Copies the app for containerization. |
+| Create `Dockerfile` | `touch Dockerfile` | Defines the build process for the container. |
+| Build the image | `docker build -t sparta-node:v1 .` | Creates the Docker image. |
+| Run container locally | `docker run -d -p 3000:3000 --name sparta-node sparta-node:v1` | Runs the Node.js app in a container. |
+| Tag for Docker Hub | `docker tag sparta-node:v1 mrmri9/sparta-node:v1` | Prepares the image for upload. |
+| Push to Docker Hub | `docker push mrmri9/sparta-node:v1` | Uploads the image to Docker Hub. |
+| Remove local image | `docker rmi sparta-node:v1` | Deletes the local copy. |
+| Pull and run from Docker Hub | `docker run -d -p 3000:3000 --name fresh-sparta-node mrmri9/sparta-node:v1` | Ensures the latest version is used. |
+| Remove conflicting container | `docker rm fresh-sparta-node` | Fixes duplicate container name issue. |
+| Run on a different port | `docker run -d -p 3010:3000 --name fresh-sparta-node mrmri9/sparta-node:v1` | Avoids port conflicts. |
+
+
+
+## Task 9:
+
+
+| **Topic** | **Key Points** |
+|-----------|--------------|
+| **Why use Docker Compose?** | Simplifies multi-container management, networking, and scaling. |
+| **Installation** | Comes with Docker Desktop; install manually on Linux. |
+| **File Storage** | `docker-compose.yml` in the project root. |
+| **Starting Application** | `docker-compose up` (foreground), `docker-compose up -d` (background). |
+| **Stopping Application** | `docker-compose down` removes containers. |
+| **Checking Services** | `docker-compose ps` lists running services. |
+| **Viewing Logs** | `docker-compose logs -f` for real-time logs. |
+| **Managing Images** | `docker-compose images` shows project images. |
+
+---
+
+
+## Task 10:
+
+# ** Summary of Fixes & Next Steps**
+| Issue | Fix |
+|-----------------|--------------------------------|
+| `Cannot GET /posts` | Set `DB_HOST` in `docker-compose.yml` and restarted. |
+| MongoDB not connecting | Set `DB_HOST` manually, updated `docker-compose.yml`. |
+| TTY error in Git Bash | Used `winpty` before `docker exec`. |
+| Missing `index.ejs` | Verified file existence and added missing template. |
+
+
