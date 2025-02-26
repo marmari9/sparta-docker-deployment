@@ -647,19 +647,12 @@ cd sparta-node-docker
 ## 2. Copy the `app` Folder Inside the New Directory
 Since we want to keep the original `app` folder, we copy it instead of moving:
 ```sh
-cp -r ~/onedrive/documents/github/app ./app
+cp -r ~/path/to/app ./app
 ```
 Verify that the `app` folder exists:
 ```sh
 ls -l
 ```
-Expected output:
-```plaintext
-sparta-node-docker/
-│── app/       # Copied Node.js application files
-```
-
----
 
 ## 3. Create the `Dockerfile`
 Inside `sparta-node-docker`, create a `Dockerfile`:
@@ -713,6 +706,11 @@ docker ps
 ```
 Open **http://localhost:3000** in your browser to confirm it works.
 
+
+![alt text](3000.png)
+
+
+
 ---
 
 ## 6. Push the Image to Docker Hub
@@ -749,35 +747,13 @@ Now, pull and run the image from **Docker Hub**:
 docker run -d -p 3000:3000 --name fresh-sparta-node mrmri9/sparta-node:v1
 ```
 
-### **Fixing Port & Name Conflicts**
-If you get an error:
-```
-docker: Error response from daemon: Conflict. The container name "/fresh-sparta-node" is already in use.
-```
-#### **1️⃣ Check existing containers:**
-```sh
-docker ps -a
-```
-#### **2️⃣ Remove the conflicting container:**
-```sh
-docker rm fresh-sparta-node
-```
-#### **3️⃣ Run the container again:**
-```sh
-docker run -d -p 3000:3000 --name fresh-sparta-node mrmri9/sparta-node:v1
-```
 
-![alt text](images/3000.png)
+# Task 9: Docker Compose
 
-
-
-
-# Research: Docker Compose
-
-## **1️⃣ Why Use Docker Compose?**
+## **Why Use Docker Compose?**
 Docker Compose is a **tool** used to **define and manage multi-container Docker applications** using a simple **YAML file**.
 
-### **🔹 Benefits:**
+### ** Benefits:**
 - **Easier Multi-Container Management** → Instead of running multiple `docker run` commands, you define everything in `docker-compose.yml`.
 - **Simplifies Networking** → Containers can easily communicate using service names instead of IP addresses.
 - **Environment Management** → Supports `.env` files for configuration.
@@ -786,17 +762,12 @@ Docker Compose is a **tool** used to **define and manage multi-container Docker 
 
 ---
 
-## **2️⃣ How to Use Docker Compose?**
-### **🔹 Installation Requirements:**
+## **How to Use Docker Compose?**
+### **Installation Requirements:**
 - **Docker must be installed.**
-- **Docker Compose is built-in** with **Docker Desktop** (Windows & macOS).
-- On **Linux**, install it manually:
-  ```sh
-  sudo apt update
-  sudo apt install docker-compose -y
-  ```
+- **Docker Compose is built-in** with **Docker Desktop**.
 
-### **🔹 Storing the Docker Compose File**
+### **Storing the Docker Compose File**
 - The `docker-compose.yml` file should be in the **project root directory**.
 - It defines services, networks, and volumes.
 
@@ -810,7 +781,7 @@ sparta-node-docker/
 
 ---
 
-## **3️⃣ Important Docker Compose Commands**  
+## **Important Docker Compose Commands**  
 
 | **Command** | **Explanation** |
 |------------|---------------|
@@ -824,8 +795,8 @@ sparta-node-docker/
 
 ---
 
-## **4️⃣ Running the Application with Docker Compose**
-### **🔹 Start Without Detached Mode**
+## ** Running the Application with Docker Compose**
+### **Start Without Detached Mode**
 ```sh
 docker-compose up
 ```
@@ -833,7 +804,7 @@ docker-compose up
 - Logs are visible in real-time.
 - Press `CTRL+C` to stop.
 
-### **🔹 Start in Detached Mode**
+### **Start in Detached Mode**
 ```sh
 docker-compose up -d
 ```
@@ -844,58 +815,21 @@ docker-compose up -d
   docker-compose logs -f
   ```
 
-### **🔹 Difference Between Running With & Without Detached Mode**
+### ** Difference Between Running With & Without Detached Mode**
 
 | Mode | Behavior |
 |------|----------|
 | **Without `-d`** | Logs appear in the terminal, stops when you close it. |
 | **With `-d`** | Runs in the background, use `docker-compose logs -f` to view logs. |
 
----
 
-## **5️⃣ Stopping & Managing Services**  
-### **🔹 Stop Running Containers**  
-```sh
-docker-compose down
-```
-This **removes** all containers, networks, and volumes.
+# Task 10: Running Node.js App & MongoDB with Docker Compose
 
-### **🔹 Restart Services**  
-```sh
-docker-compose restart
-```
-
-### **🔹 Check Running Services**  
-```sh
-docker-compose ps
-```
-
----
-
-## **6️⃣ Viewing Logs & Images**  
-### **🔹 View Real-Time Logs**  
-```sh
-docker-compose logs -f
-```
-This shows **live logs** from all services.
-
-### **🔹 View Docker Compose Images**  
-```sh
-docker-compose images
-```
-Lists all **images used** in the project.
-
----
-
-
-## Task 9: 
-# Running Node.js App & MongoDB with Docker Compose
-
-## **1️⃣ Setting Up Docker Compose for Node.js & MongoDB**
+## **1-Setting Up Docker Compose for Node.js & MongoDB**
 
 We used **Docker Compose** to manage a **Node.js app** and a **MongoDB database** together in a multi-container setup.
 
-### **✅ Docker Compose Configuration**
+### **Docker Compose Configuration**
 Inside the project directory (`sparta-node-docker`), we created a `docker-compose.yml` file:
 
 ```yaml
@@ -928,7 +862,7 @@ volumes:
 
 ---
 
-## **2️⃣ Running the Application**
+## **2️- Running the Application**
 To start the containers, we ran:
 ```sh
 docker-compose up -d
@@ -942,10 +876,10 @@ docker-compose ps
 
 ---
 
-## **3️⃣ Seeding the Database**
+## **3️- Seeding the Database**
 We used a **seed script** (`seeds/seed.js`) to populate MongoDB with test data.
 
-### **✅ Running the Seeding Script**
+### **Running the Seeding Script**
 Inside the **sparta-node** container:
 ```sh
 winpty docker exec -it sparta-node bash
@@ -973,9 +907,9 @@ db.posts.find().pretty()
 
 ---
 
-## **4️⃣ Fixing Issues & Blockers**
+## **4️- Fixing Issues & Blockers**
 
-### **🚧 Blocker 1: `Cannot GET /posts` Error**
+### **Blocker 1: `Cannot GET /posts` Error**
 **Issue:** The `/posts` route did not work.
 
 **Fix:**
@@ -992,7 +926,7 @@ db.posts.find().pretty()
   ```
 - `/posts` worked after the fix!
 
-### **🚧 Blocker 2: MongoDB Connection Issues**
+### **Blocker 2: MongoDB Connection Issues**
 **Issue:** `DB_HOST` was not set inside the container, preventing MongoDB from connecting.
 
 **Fix:**
@@ -1002,7 +936,7 @@ db.posts.find().pretty()
   ```
 - Updated `docker-compose.yml` to set `DB_HOST` automatically.
 
-### **🚧 Blocker 3: "the input device is not a TTY" Error in Git Bash**
+### **Blocker 3: "the input device is not a TTY" Error in Git Bash**
 **Issue:** Running `docker exec -it` inside Git Bash gave an error.
 
 **Fix:** Used `winpty` before the command:
@@ -1010,19 +944,9 @@ db.posts.find().pretty()
 winpty docker exec -it sparta-node bash
 ```
 
-### **🚧 Blocker 4: Missing `views/posts/index.ejs`**
-**Issue:** The `/posts` route was rendering `posts/index.ejs`, but the file was missing.
-
-**Fix:**
-- Checked if the file existed inside the container:
-  ```sh
-  ls views/posts/index.ejs
-  ```
-- Added a proper `index.ejs` file in the correct location.
-
 ---
 
-## **5️⃣ Final Testing**
+## **4- Final Testing**
 After resolving all issues, we successfully accessed **`/posts`** in the browser:
 ```plaintext
 http://localhost:3000/posts
@@ -1038,96 +962,95 @@ Also tested with **cURL**:
 curl -X GET http://localhost:3000/posts
 ```
 
-
-
-
 # Running Docker Containers on EC2 with Nginx Reverse Proxy (Ubuntu)
 
 ## 1. **Connect to Your EC2 Instance**
-   SSH into your EC2 instance using the following command:
-   ```bash
-   ssh -i ~/.ssh/tech501-maram-key-2.pem ubuntu@<EC2-IP>
-2. Install Docker & Docker Compose
-Update the system and install Docker:
+SSH into your EC2 instance using the following command:
+```bash
+ssh -i ~/path/to/private/key ubuntu@<EC2-IP>
+```
 
-bash
-Copy
+## 2. **Install Docker & Docker Compose**
+Update the system and install Docker:
+```bash
 sudo apt update -y
 sudo apt install docker.io -y
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker ubuntu
-Log out and log back in to apply Docker permissions:
+```
 
-bash
-Copy
+Log out and log back in to apply Docker permissions:
+```bash
 exit
 ssh -i ~/.ssh/tech501-maram-key-2.pem ubuntu@<EC2-IP>
-Verify Docker installation:
+```
 
-bash
-Copy
+Verify Docker installation:
+```bash
 docker --version
 docker ps
-Install Docker Compose:
+```
 
-bash
-Copy
+Install Docker Compose:
+```bash
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
-3. Clone Your GitHub Repository
-Clone your repository to your EC2 instance:
+```
 
-bash
-Copy
+## 3. **Clone Your GitHub Repository**
+Clone your repository to your EC2 instance:
+```bash
 git clone https://github.com/marmari9/sparta-docker-deployment.git
 cd sparta-docker-deployment/sparta-node-docker
-4. Run Docker Compose
+```
+
+## 4. **Run Docker Compose**
 Pull the latest images:
-
-bash
-Copy
+```bash
 docker-compose pull
+```
+
 Start the containers:
-
-bash
-Copy
+```bash
 docker-compose up -d
-5. Check If Everything is Running
+```
+
+## 5. **Check If Everything is Running**
 List running containers:
-
-bash
-Copy
+```bash
 docker ps
+```
+
 Test the app from the EC2 instance:
-
-bash
-Copy
+```bash
 curl -X GET http://localhost:3000/posts
+```
+
 Test from your browser:
-
+```
 Open http://<EC2-IP>:3000/posts
-6. Expose the App Properly
+```
+
+## 6. **Expose the App Properly**
 If the browser test doesn't work, check EC2 security groups:
+- Allow Inbound Rule for Port 3000 (Custom TCP Rule, Anywhere).
 
-Allow Inbound Rule for Port 3000 (Custom TCP Rule, Anywhere).
-7. Set Up Nginx Reverse Proxy (Port 8080)
+## 7. **Set Up Nginx Reverse Proxy (Port 8080)**
 Install Nginx:
-
-bash
-Copy
+```bash
 sudo apt update
 sudo apt install nginx -y
+```
+
 Configure Nginx as a reverse proxy:
-
-bash
-Copy
+```bash
 sudo nano /etc/nginx/sites-available/default
-Replace the contents with:
+```
 
-nginx
-Copy
+Replace the contents with:
+```nginx
 server {
     listen 8080;
     server_name localhost;
@@ -1139,52 +1062,66 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
+```
+
 Save and exit (CTRL+X → Y → Enter).
 
 Restart Nginx:
-
-bash
-Copy
+```bash
 sudo systemctl restart nginx
+```
+
 Check if Nginx is listening on port 8080:
-
-bash
-Copy
+```bash
 ss -tulnp | grep 8080
+```
+
 Test in the browser:
-
+```
 Open http://<EC2-IP>:8080/posts
-8. Security Group Configuration
+```
+
+## 8. **Security Group Configuration**
 Ensure EC2 security group allows inbound traffic on port 8080:
+- Go to AWS Console → EC2 → Security Groups.
+- Edit Inbound Rules → Add Rule: Custom TCP, Port 8080, Source: Anywhere (0.0.0.0/0).
 
-Go to AWS Console → EC2 → Security Groups.
-Edit Inbound Rules → Add Rule: Custom TCP, Port 8080, Source: Anywhere (0.0.0.0/0).
-9. Verify the Database and App
+## 9. **Verify the Database and App**
 SSH into your EC2 instance and enter the Node.js container:
-
-bash
-Copy
+```bash
 docker exec -it sparta-node bash
-Set the environment variable and seed the database:
+```
 
-bash
-Copy
+Set the environment variable and seed the database:
+```bash
 export DB_HOST="mongodb://mongo:27017/sparta_db"
 node seeds/seed.js
-Verify data in MongoDB:
+```
 
-bash
-Copy
+Verify data in MongoDB:
+```bash
 docker exec -it mongodb bash
 mongosh
 use sparta_db
 db.posts.find().pretty()
+```
+
 Exit the containers:
+```bash
+exit
+exit
+```
 
-bash
-Copy
-exit
-exit
 Test the API again:
-
+```
 Open http://<EC2-IP>:3000/posts
+```
+
+![alt text](<images/app running on ec2.png>)
+
+
+![alt text](<images/app port 8080.png>)
+
+
+![alt text](<images/posts page on ec2 instance.png>)
+
