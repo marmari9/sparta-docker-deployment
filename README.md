@@ -1,7 +1,125 @@
-# Task: Run and Pull Your First Docker Image
+# Virtual Machines (VMs) vs Containers
 
-## 1. Open Git Bash (or Terminal on Mac)
-Ensure Docker is running in the background before proceeding.
+## Virtual Machines (VMs)
+- Abstraction of a physical server, turning one server into many.
+- A **hypervisor** is installed on the host server, allowing multiple VMs to run on a single machine.
+- Each VM includes a **full copy of an operating system (OS)**.
+- **Resource-intensive** due to OS duplication.
+
+## Containers
+- Abstraction at the application layer, packaging application artifacts and dependencies together.
+- Containers **share the host OS**, unlike VMs that require separate OS instances.
+- Each container runs in its **own isolated process**, controlled by the **Docker Engine**.
+- **Lightweight** compared to VMs, with minimal overhead.
+
+![alt text](<images/container vs vm.png>)
+
+
+## Benefits of Virtual Machines (VMs) Over Traditional Architecture
+- **Better Hardware Utilisation** – Run multiple OS instances on a single physical machine.
+- **Isolation** – Each VM is fully isolated, improving security and stability.
+- **OS Flexibility** – Can run different OS versions/types on the same hardware.
+- **Legacy Application Support** – Ideal for running older applications that require full OS environments.
+- **Disaster Recovery & Snapshots** – VMs support easy backup, recovery, and migration.
+
+## Benefits of Containers Over Virtual Machines
+- **Lightweight** – No full OS duplication, reducing resource consumption.
+- **Faster Deployment** – Boots up in seconds, unlike VMs which take minutes.
+- **Scalability** – Easily spin up/down instances as needed for microservices.
+- **Portability** – Runs the same across different environments (development, testing, production).
+- **Efficient Resource Usage** – Shares the same OS kernel, reducing overhead.
+
+# Microservices Architecture
+
+## Overview
+- Microservices architecture is an approach to system design that **breaks complex systems into smaller, manageable services**.
+- Each microservice is **independently deployable** and communicates via **APIs**.
+- This architecture enables **scalability, flexibility, and easier maintenance**.
+
+---
+## How Microservices Are Made Possible
+
+- **Containers** – Tools like Docker and Kubernetes package and run microservices efficiently.
+- **APIs** – Microservices communicate using REST, gRPC, or GraphQL.
+- **Service Discovery** – Kubernetes and AWS Service Discovery help services find each other.
+- **CI/CD Pipelines** – Automates building, testing, and deploying services.
+- **Messaging Queues** – Kafka and RabbitMQ enable async communication between services.
+- **Cloud Platforms** – AWS, Azure, and Google Cloud provide scalable infrastructure.
+- **Monitoring Tools** – Prometheus and Grafana track service health and performance.
+
+## Advantages of Microservices Architecture
+
+### 1. **Accelerate Scalability**
+- Each microservice runs independently, making it easier to **add, remove, update, or scale** services without affecting others.
+- Resources can be allocated dynamically based on **demand spikes** (e.g., seasonal shopping periods).
+
+### 2. **Improved Fault Isolation**
+- Unlike monolithic systems, failure in one service **does not bring down the entire application**.
+- Fault-tolerant strategies prevent cascading failures.
+
+### 3. **Programming Language and Technology Agnostic**
+- Developers can use **different languages and frameworks** for different microservices.
+- No need to learn a new language to work on a specific service.
+- Supports **cloud-based deployment**, allowing access from any internet-connected device.
+
+### 4. **Simpler Deployment**
+- Teams can deploy independent services without affecting others.
+- New features or updates can be added **without redesigning the entire system**.
+
+### 5. **Reusability Across Business Areas**
+- Common microservices (e.g., login, payment processing) can be shared across multiple applications.
+
+### 6. **Faster Time-to-Market**
+- Independent development of microservices means teams **don’t have to wait** for other services to be completed.
+- Enables rapid **feature deployment** without major system disruptions.
+
+### 7. **Ability to Experiment**
+- New features can be tested and rolled back quickly if they don’t meet expectations.
+- Reduces the risk of introducing large-scale failures.
+
+# Docker 
+
+## What is Docker?
+- Docker is an **open platform for developing, shipping, and running applications** in containers.
+- It allows developers to separate applications from infrastructure, enabling **faster software delivery**.
+- Containers run the same regardless of the underlying environment, ensuring **portability and consistency**.
+- Docker provides tooling and a universal packaging format, making application deployment **more efficient and scalable**.
+
+---
+
+## Alternatives to Docker
+- **Podman** – A daemonless container engine with a focus on security.
+- **LXC (Linux Containers)** – A lightweight virtualization method for running multiple isolated Linux systems.
+- **containerd** – An industry-standard container runtime used by Kubernetes.
+- **CRI-O** – A Kubernetes-focused container runtime that follows the OCI standard.
+- **rkt (Rocket)** – A security-focused container runtime (now discontinued).
+
+---
+
+## How Docker Works (Docker Architecture/API)
+- **Docker Client** – CLI or API that allows users to interact with the Docker daemon.
+- **Docker Daemon** – Runs in the background and manages images, containers, and networks.
+- **Docker Images** – Read-only templates containing an application and its dependencies.
+- **Docker Containers** – Instances of images that run applications in isolated environments.
+- **Docker Registry** – Stores and distributes images (e.g., Docker Hub, private registries).
+- **Docker Compose** – A tool for defining and running multi-container applications using YAML files.
+
+---
+
+## Success Story Using Docker
+### **Spotify**
+- Spotify leverages Docker to **build, test, and deploy** services efficiently.
+- Docker helps **scale microservices** across multiple environments while ensuring consistency.
+- Using Docker containers, Spotify **reduces infrastructure overhead** and speeds up software delivery.
+
+
+# Task 1 : Run and Pull Your First Docker Image
+
+## 1. Open Git Bash
+Ensure Docker is running in the background before proceeding. Run:
+```sh
+docker login
+```
 
 ---
 
@@ -50,6 +168,10 @@ docker run hello-world
 ```
 - This time, Docker does not download the image again because it already exists locally.
 - Instead, it reuses the existing image and creates a new container.
+
+  ![alt text](<docker images -2.png>)
+
+
 - You can confirm this by listing all existing images:
   ```sh
   docker images
@@ -61,13 +183,9 @@ docker run hello-world
 
 ---
 
+## Task 2 :Running an Nginx Web Server in Docker
 
-
----
-
-## 7. Running an Nginx Web Server in Docker
-
-### 1. Open Git Bash (or Terminal on Mac)
+### 1. Open Git Bash 
 Ensure Docker is running in the background.
 
 ### 2. Download the Latest Nginx Docker Image
@@ -96,7 +214,6 @@ docker ps
 This lists running containers. If you see `my-nginx`, the server is running.
 
 
-
 ![alt text](<images/nginx running-1.png>)
 
 
@@ -122,7 +239,7 @@ docker rm my-nginx
 
 ---
 
-## 8. Removing a Running Docker Container
+# Task 3: Removing a Running Docker Container
 
 ### 1. Check If Nginx Is Running
 Run:
@@ -162,21 +279,15 @@ Run:
 ```sh
 docker ps -a
 ```
-If `my-nginx` no longer appears, the removal was successful.
+ `my-nginx` no longer appears, the removal was successful.
 
 
-
-
-# 6. Modifying a Running Nginx Container
+# Task 4: Modifying a Running Nginx Container
 
 ### 1. Run the Nginx Container on Port 80
 ```sh
 docker run -d -p 80:80 --name my-nginx nginx
 ```
-- `-d` runs it in the background.
-- `-p 80:80` maps the container's port 80 to the host's port 80.
-- `--name my-nginx` assigns the name `my-nginx`.
-
 Verify it's running:
 ```sh
 docker ps
@@ -197,6 +308,11 @@ docker exec -it my-nginx bash
 If using Git Bash and you get a TTY error, use:
 ```sh
 winpty docker exec -it my-nginx bash
+```
+#### **Temporary Alias (For Current Session)**
+Run the following command to create a temporary alias:
+```sh
+alias docker='winpty docker'
 ```
 
 ### 4. Update & Upgrade Packages
@@ -258,7 +374,7 @@ Refresh `http://localhost` in the browser. The modified message should be visibl
 ![alt text](images/change.png)
 
 
-## 6. Running Another Container on Port 80 and Resolving Port Conflict
+# Task 5: Running Another Container on Port 80 and Resolving Port Conflict
 
 ### 1. Ensure Your Modified Nginx Container Is Running
 Run:
@@ -323,10 +439,10 @@ You should see `dreamteam-nginx` now mapped to port 90.
 
 
 
-## 6. Creating and Pushing a Custom Nginx Image to Docker Hub
+# Task 6: Creating and Pushing a Custom Nginx Image to Docker Hub
 
 ### 1. Commit the Running Nginx Container into an Image
-Since your `my-nginx` container already has a **modified `index.html`**, we will create an image from it.
+Since  `my-nginx` container already has a **modified `index.html`**, we will create an image from it.
 
 Run:
 ```sh
@@ -345,7 +461,7 @@ You should see `mrmri9/custom-nginx:v1` in the list.
 ---
 
 ### 2. Push the Image to Docker Hub
-1. **Log in to Docker Hub** (if not logged in already):
+1. **Log in to Docker Hub** :
    ```sh
    docker login
    ```
@@ -357,7 +473,7 @@ You should see `mrmri9/custom-nginx:v1` in the list.
 ---
 
 ### 3. Run a Container Using the Pushed Image
-Now, run a new container from **your Docker Hub image**:
+Now, we run a new container from **your Docker Hub image**:
 ```sh
 docker run -d -p 8080:80 --name my-custom-nginx mrmri9/custom-nginx:v1
 ```
@@ -377,13 +493,13 @@ docker ps
 ---
 
 ### 4. Verify in Browser
-- Open `http://localhost:8080` in your browser.
-- You should see your **modified Nginx homepage**.
+- Open `http://localhost:8080` in the browser.
+- we should see the **modified Nginx homepage**.
 
 ![alt text](<images/task 6.png>)
 
 
-# Task: Automating Docker Image Creation Using a Dockerfile
+# Task 7: Automating Docker Image Creation Using a Dockerfile
 
 ## 1. Create a New Directory
 Since we want to automate the process, we will create a new directory for the project.
@@ -391,7 +507,6 @@ Since we want to automate the process, we will create a new directory for the pr
 mkdir tech501-mod-nginx-dockerfile
 cd tech501-mod-nginx-dockerfile
 ```
-This keeps the work **organized** and separate from existing projects.
 
 ---
 
@@ -473,7 +588,7 @@ docker run -d -p 8080:80 --name auto-nginx tech501-nginx-auto:v1
 ```sh
 docker login
 ```
-### 2. Tag the image with your Docker Hub username:
+### 2. Tag the image with your own Docker Hub username:
 ```sh
 docker tag tech501-nginx-auto:v1 mrmri9/nginx-auto:v1
 ```
@@ -481,7 +596,7 @@ docker tag tech501-nginx-auto:v1 mrmri9/nginx-auto:v1
 ```sh
 docker push mrmri9/nginx-auto:v1
 ```
-Now, your image is **publicly available** on Docker Hub.
+Now, the image is **publicly available** on Docker Hub.
 
 ---
 
@@ -518,7 +633,7 @@ docker ps
 
 
 
-# Task: Running the Node.js v20 Sparta Test App in a Docker Container
+# Task 8: Running the Node.js v20 Sparta Test App in a Docker Container
 
 ## 1. Create a New Project Folder
 Each Docker project needs its own `Dockerfile`, so we create a separate directory:
@@ -922,3 +1037,154 @@ Also tested with **cURL**:
 ```sh
 curl -X GET http://localhost:3000/posts
 ```
+
+
+
+
+# Running Docker Containers on EC2 with Nginx Reverse Proxy (Ubuntu)
+
+## 1. **Connect to Your EC2 Instance**
+   SSH into your EC2 instance using the following command:
+   ```bash
+   ssh -i ~/.ssh/tech501-maram-key-2.pem ubuntu@<EC2-IP>
+2. Install Docker & Docker Compose
+Update the system and install Docker:
+
+bash
+Copy
+sudo apt update -y
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker ubuntu
+Log out and log back in to apply Docker permissions:
+
+bash
+Copy
+exit
+ssh -i ~/.ssh/tech501-maram-key-2.pem ubuntu@<EC2-IP>
+Verify Docker installation:
+
+bash
+Copy
+docker --version
+docker ps
+Install Docker Compose:
+
+bash
+Copy
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+3. Clone Your GitHub Repository
+Clone your repository to your EC2 instance:
+
+bash
+Copy
+git clone https://github.com/marmari9/sparta-docker-deployment.git
+cd sparta-docker-deployment/sparta-node-docker
+4. Run Docker Compose
+Pull the latest images:
+
+bash
+Copy
+docker-compose pull
+Start the containers:
+
+bash
+Copy
+docker-compose up -d
+5. Check If Everything is Running
+List running containers:
+
+bash
+Copy
+docker ps
+Test the app from the EC2 instance:
+
+bash
+Copy
+curl -X GET http://localhost:3000/posts
+Test from your browser:
+
+Open http://<EC2-IP>:3000/posts
+6. Expose the App Properly
+If the browser test doesn't work, check EC2 security groups:
+
+Allow Inbound Rule for Port 3000 (Custom TCP Rule, Anywhere).
+7. Set Up Nginx Reverse Proxy (Port 8080)
+Install Nginx:
+
+bash
+Copy
+sudo apt update
+sudo apt install nginx -y
+Configure Nginx as a reverse proxy:
+
+bash
+Copy
+sudo nano /etc/nginx/sites-available/default
+Replace the contents with:
+
+nginx
+Copy
+server {
+    listen 8080;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+Save and exit (CTRL+X → Y → Enter).
+
+Restart Nginx:
+
+bash
+Copy
+sudo systemctl restart nginx
+Check if Nginx is listening on port 8080:
+
+bash
+Copy
+ss -tulnp | grep 8080
+Test in the browser:
+
+Open http://<EC2-IP>:8080/posts
+8. Security Group Configuration
+Ensure EC2 security group allows inbound traffic on port 8080:
+
+Go to AWS Console → EC2 → Security Groups.
+Edit Inbound Rules → Add Rule: Custom TCP, Port 8080, Source: Anywhere (0.0.0.0/0).
+9. Verify the Database and App
+SSH into your EC2 instance and enter the Node.js container:
+
+bash
+Copy
+docker exec -it sparta-node bash
+Set the environment variable and seed the database:
+
+bash
+Copy
+export DB_HOST="mongodb://mongo:27017/sparta_db"
+node seeds/seed.js
+Verify data in MongoDB:
+
+bash
+Copy
+docker exec -it mongodb bash
+mongosh
+use sparta_db
+db.posts.find().pretty()
+Exit the containers:
+
+bash
+Copy
+exit
+exit
+Test the API again:
+
+Open http://<EC2-IP>:3000/posts
