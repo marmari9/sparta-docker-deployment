@@ -169,7 +169,7 @@ docker run hello-world
 - This time, Docker does not download the image again because it already exists locally.
 - Instead, it reuses the existing image and creates a new container.
 
-  ![alt text](<docker images -2.png>)
+  ![alt text](<images/docker images -2.png>)
 
 
 - You can confirm this by listing all existing images:
@@ -707,7 +707,7 @@ docker ps
 Open **http://localhost:3000** in your browser to confirm it works.
 
 
-![alt text](3000.png)
+![alt text](images/3000.png)
 
 
 
@@ -983,7 +983,7 @@ sudo usermod -aG docker ubuntu
 Log out and log back in to apply Docker permissions:
 ```bash
 exit
-ssh -i ~/.ssh/tech501-maram-key-2.pem ubuntu@<EC2-IP>
+ssh -i ~/path/to/private/key ubuntu@<EC2-IP>
 ```
 
 Verify Docker installation:
@@ -1057,9 +1057,7 @@ server {
 
     location / {
         proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        
     }
 }
 ```
